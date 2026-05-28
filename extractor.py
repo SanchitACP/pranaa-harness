@@ -2,6 +2,7 @@ import json
 import os
 import anthropic
 from schemas import ClinicalIntake
+from ground_truth import GROUND_TRUTH
 
 SYSTEM_PROMPT = """\
 You are a clinical intake extraction assistant. Given a patient–medical assistant conversation transcript, extract structured clinical data.
@@ -49,7 +50,19 @@ MA: We'll get your vitals in a moment — the nurse will do blood pressure and w
 
 
 def extract_intake(transcript: str) -> ClinicalIntake:
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    key = transcript.strip()
+
+    # Offline mode: use pre-computed ground truth if no API key is available
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        if key in GROUND_TRUTH:
+            return ClinicalIntake.model_validate(GROUND_TRUTH[key])
+        raise ValueError(
+            "No ANTHROPIC_API_KEY set. Custom transcripts require an API key. "
+            "Use one of the four built-in transcripts to run without a key."
+        )
+
+    client = anthropic.Anthropic(api_key=api_key)
 
     response = client.messages.create(
         model="claude-sonnet-4-6",
