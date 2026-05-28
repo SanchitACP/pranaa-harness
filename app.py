@@ -88,7 +88,7 @@ fhir_bundle = st.session_state.fhir
 if intake and result:
 
     # Summary metrics
-    c1, c2, c3, c4, c5 = st.columns(5)
+    c1, c2, c3, c4, c5 = st.columns([2, 2, 1, 1, 1])
     c1.metric("Patient", intake.patient_name or "—")
     c2.metric("DOB", intake.date_of_birth or "—")
     c3.metric("Score", f"{result.overall_score:.0f} / 100")
