@@ -89,8 +89,12 @@ if intake and result:
 
     # Summary metrics
     c1, c2, c3, c4, c5 = st.columns([2, 2, 1, 1, 1])
-    c1.metric("Patient", intake.patient_name or "—")
-    c2.metric("DOB", intake.date_of_birth or "—")
+    with c1:
+        st.markdown("**Patient**")
+        st.markdown(f"### {intake.patient_name or '—'}")
+    with c2:
+        st.markdown("**DOB**")
+        st.markdown(f"### {intake.date_of_birth or '—'}")
     c3.metric("Score", f"{result.overall_score:.0f} / 100")
     c4.metric("Evidence Coverage", f"{result.evidence_coverage:.0%}")
     c5.metric("Gaps Flagged", result.gap_count)
