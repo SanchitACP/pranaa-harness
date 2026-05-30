@@ -16,86 +16,86 @@ st.markdown("""
 <style>
 /* ── Base ── */
 html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
-    background-color: #0a0a0a;
+    background-color: #1c1c1c;
     color: #ffffff;
 }
 [data-testid="stHeader"] {
-    background-color: #0a0a0a;
+    background-color: #1c1c1c;
 }
 
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {
-    background-color: #0f0f0f;
-    border-right: 1px solid #00ff41;
+    background-color: #222222;
+    border-right: 1px solid #B8893F;
 }
 [data-testid="stSidebar"] * {
     color: #ffffff !important;
 }
 
 /* ── Headings ── */
-h1 { color: #00ff41 !important; letter-spacing: 1px; }
-h2, h3 { color: #00ff41 !important; }
-h4, h5, h6 { color: #ccffcc !important; }
+h1 { color: #B8893F !important; letter-spacing: 1px; }
+h2, h3 { color: #B8893F !important; }
+h4, h5, h6 { color: #D4AA70 !important; }
 
 /* ── Caption / subtext ── */
 [data-testid="stCaptionContainer"] p,
-.stCaption { color: #888888 !important; }
+.stCaption { color: #9ca3af !important; }
 
 /* ── Metrics ── */
 [data-testid="stMetric"] {
-    background: #111111;
-    border: 1px solid #00ff41;
+    background: #252525;
+    border: 1px solid #B8893F;
     border-radius: 8px;
     padding: 12px;
 }
-[data-testid="stMetricLabel"] { color: #00ff41 !important; font-size: 0.75rem !important; }
+[data-testid="stMetricLabel"] { color: #B8893F !important; font-size: 0.75rem !important; }
 [data-testid="stMetricValue"] { color: #ffffff !important; }
 
 /* ── Buttons ── */
 [data-testid="stButton"] > button {
-    background-color: #00ff41 !important;
+    background-color: #B8893F !important;
     color: #000000 !important;
     font-weight: 700 !important;
     border: none !important;
     border-radius: 6px !important;
 }
 [data-testid="stButton"] > button:hover {
-    background-color: #00cc33 !important;
+    background-color: #9A7232 !important;
     color: #000000 !important;
 }
 [data-testid="stButton"] > button:disabled {
-    background-color: #1a1a1a !important;
-    color: #444444 !important;
-    border: 1px solid #333333 !important;
+    background-color: #2a2a2a !important;
+    color: #555555 !important;
+    border: 1px solid #3a3a3a !important;
 }
 
 /* ── Download button ── */
 [data-testid="stDownloadButton"] > button {
     background-color: transparent !important;
-    color: #00ff41 !important;
-    border: 1px solid #00ff41 !important;
+    color: #B8893F !important;
+    border: 1px solid #B8893F !important;
     border-radius: 6px !important;
     font-weight: 600 !important;
 }
 
 /* ── Tabs ── */
 [data-testid="stTabs"] [role="tab"] {
-    color: #888888 !important;
+    color: #9ca3af !important;
     border-bottom: 2px solid transparent;
 }
 [data-testid="stTabs"] [role="tab"][aria-selected="true"] {
-    color: #00ff41 !important;
-    border-bottom: 2px solid #00ff41 !important;
+    color: #B8893F !important;
+    border-bottom: 2px solid #B8893F !important;
 }
 
 /* ── Expanders ── */
 [data-testid="stExpander"] {
-    background-color: #111111 !important;
-    border: 1px solid #1f1f1f !important;
+    background-color: #252525 !important;
+    border: 1px solid #2e2e2e !important;
     border-radius: 6px !important;
 }
 [data-testid="stExpander"]:hover {
-    border-color: #00ff41 !important;
+    border-color: #B8893F !important;
 }
 [data-testid="stExpander"] summary {
     color: #ffffff !important;
@@ -103,9 +103,9 @@ h4, h5, h6 { color: #ccffcc !important; }
 
 /* ── Alerts / info boxes ── */
 [data-testid="stAlert"] {
-    background-color: #0f1f0f !important;
-    border-left: 3px solid #00ff41 !important;
-    color: #ccffcc !important;
+    background-color: #2a2010 !important;
+    border-left: 3px solid #B8893F !important;
+    color: #D4AA70 !important;
 }
 
 /* ── Selectbox / radio ── */
@@ -123,23 +123,23 @@ h4, h5, h6 { color: #ccffcc !important; }
 }
 
 /* ── Divider ── */
-hr { border-color: #1f1f1f !important; }
+hr { border-color: #2e2e2e !important; }
 
 /* ── Code blocks ── */
 [data-testid="stCode"] {
-    background-color: #0f0f0f !important;
-    border: 1px solid #1f1f1f !important;
+    background-color: #202020 !important;
+    border: 1px solid #2e2e2e !important;
 }
 
 /* ── Progress bar ── */
 [data-testid="stProgressBar"] > div > div {
-    background-color: #00ff41 !important;
+    background-color: #B8893F !important;
 }
 
 /* ── Table (markdown) ── */
 table { border-collapse: collapse; width: 100%; }
-th { color: #00ff41 !important; border-bottom: 1px solid #00ff41 !important; }
-td { color: #ffffff !important; border-bottom: 1px solid #1f1f1f !important; }
+th { color: #B8893F !important; border-bottom: 1px solid #B8893F !important; }
+td { color: #ffffff !important; border-bottom: 1px solid #2e2e2e !important; }
 </style>
 """, unsafe_allow_html=True)
 
