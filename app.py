@@ -4,7 +4,7 @@ import streamlit as st
 from extractor import extract_intake
 from evaluator import evaluate
 from fhir_export import to_fhir_bundle
-from transcripts import TRANSCRIPTS
+from transcripts import TRANSCRIPTS, ADVERSARIAL_DESCRIPTIONS
 from consistency import run_consistency_test
 
 st.set_page_config(
@@ -113,6 +113,14 @@ h4, h5, h6 { color: #ccffcc !important; }
 [data-testid="stRadio"] > div {
     color: #ffffff !important;
 }
+[data-testid="stSelectbox"] span,
+[data-testid="stSelectbox"] input,
+[data-testid="stSelectbox"] p,
+[data-testid="stSelectbox"] div[class*="selected"],
+[data-testid="stSelectbox"] div[class*="singleValue"],
+[data-testid="stSelectbox"] * {
+    color: #000000 !important;
+}
 
 /* ── Divider ── */
 hr { border-color: #1f1f1f !important; }
@@ -147,6 +155,11 @@ with st.sidebar:
     if mode == "Built-in examples":
         selected_name = st.selectbox("Select transcript", list(TRANSCRIPTS.keys()))
         transcript_text: str = TRANSCRIPTS[selected_name]
+
+        if selected_name in ADVERSARIAL_DESCRIPTIONS:
+            info = ADVERSARIAL_DESCRIPTIONS[selected_name]
+            st.warning(f"**Adversarial test** — {info['trap']}")
+            st.caption(f"**Correct behavior:** {info['correct']}")
     else:
         selected_name = "Custom"
         transcript_text = st.text_area(

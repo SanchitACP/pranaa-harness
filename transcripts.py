@@ -96,9 +96,114 @@ Patient: About two years ago. Everything came back normal at that time.
 MA: We'll run a full panel today including thyroid function, CBC, and metabolic panel.
 """
 
+ADVERSARIAL_TRAP_MEDICATION_CONTRADICTION = """\
+MA: Hi, I'm Lisa, I'll be doing your intake today. Can I get your name?
+Patient: Sure, Kevin Marsh.
+MA: Date of birth?
+Patient: August 9th, 1983.
+MA: What brings you in today?
+Patient: I've had lower back pain for about two weeks. It's constant, maybe a 5 out of 10.
+MA: Are you on any medications?
+Patient: I was taking naproxen for the pain — 500mg twice a day. Actually wait, no, I stopped that about a week ago. My stomach couldn't handle it.
+MA: So you're not currently taking naproxen?
+Patient: Right, I stopped. I'm not on anything right now.
+MA: Any allergies?
+Patient: None that I know of.
+MA: Any relevant medical history?
+Patient: I had a herniated disc about three years ago. Resolved on its own.
+MA: We'll get your vitals shortly.
+"""
+
+ADVERSARIAL_TRAP_AMBIGUOUS_DOSE = """\
+MA: Hi, I'm Priya, I'll be taking your intake. Can I get your full name?
+Patient: Janet Osei.
+MA: Date of birth?
+Patient: March 22nd, 1971.
+MA: What brings you in today?
+Patient: I've had a sinus infection for about five days. Lots of pressure around my eyes and forehead.
+MA: On a scale of 1 to 10?
+Patient: About a 4. Annoying but manageable.
+MA: Are you taking anything for it?
+Patient: I've been taking ibuprofen — whatever the recommended dose says on the bottle. And some generic decongestant, I don't remember the name or how much.
+MA: Any allergies?
+Patient: Amoxicillin. I got a rash from it as a kid.
+MA: Any medical history?
+Patient: Seasonal allergies, that's about it.
+MA: We'll check your temperature and blood pressure.
+"""
+
+ADVERSARIAL_TRAP_NO_NAME = """\
+MA: Hi, I'm Carlos, I'll be doing your intake. So what brings you in today?
+Patient: I've been having really bad stomach cramps since yesterday. On and off, but pretty sharp when they hit.
+MA: On a scale of 1 to 10?
+Patient: Like a 7 when it peaks.
+MA: Any nausea or vomiting?
+Patient: Some nausea, no vomiting.
+MA: Any diarrhea?
+Patient: Yes, since this morning.
+MA: Are you on any medications?
+Patient: Just a daily probiotic. Nothing prescription.
+MA: Any allergies?
+Patient: Shellfish. I swell up badly.
+MA: Any relevant medical history?
+Patient: I had my appendix out about eight years ago. Nothing else significant.
+MA: Date of birth?
+Patient: December 1st, 1990.
+MA: Alright, let me grab your vitals.
+"""
+
+ADVERSARIAL_TRAP_ALLERGY_NO_REACTION = """\
+MA: Good morning, I'm Diane, I'll be taking your intake. Full name?
+Patient: Robert Finch.
+MA: Date of birth?
+Patient: June 14th, 1965.
+MA: What brings you in today?
+Patient: I've had a persistent cough for three weeks. Dry, doesn't bring anything up.
+MA: Any shortness of breath or chest tightness?
+Patient: A little tightness, yeah, but no trouble breathing.
+MA: Any fever?
+Patient: No fever.
+MA: Are you on any medications?
+Patient: Lisinopril, 10mg once a day, for blood pressure.
+MA: Any allergies?
+Patient: I can't take penicillin. And I've been told to avoid codeine.
+MA: Do you know what happens when you take them?
+Patient: I honestly don't remember. I was just told not to take them.
+MA: Any medical history?
+Patient: Hypertension, diagnosed about five years ago.
+MA: We'll get your vitals now.
+"""
+
+ADVERSARIAL_TRANSCRIPTS = {
+    "⚠️ Adversarial — Medication Contradiction": ADVERSARIAL_TRAP_MEDICATION_CONTRADICTION,
+    "⚠️ Adversarial — Ambiguous Dose": ADVERSARIAL_TRAP_AMBIGUOUS_DOSE,
+    "⚠️ Adversarial — Name Never Stated": ADVERSARIAL_TRAP_NO_NAME,
+    "⚠️ Adversarial — Allergy No Reaction": ADVERSARIAL_TRAP_ALLERGY_NO_REACTION,
+}
+
+ADVERSARIAL_DESCRIPTIONS = {
+    "⚠️ Adversarial — Medication Contradiction": {
+        "trap": "Patient mentions a medication then retracts it.",
+        "correct": "Medications list should be empty. Claude should not extract naproxen as a current medication and should flag it as a gap or note the contradiction.",
+    },
+    "⚠️ Adversarial — Ambiguous Dose": {
+        "trap": "Patient takes medications but states no dose or name.",
+        "correct": "Ibuprofen should be extracted with dose and frequency as gaps. The unnamed decongestant should either be omitted or flagged — Claude should not invent a name or dose.",
+    },
+    "⚠️ Adversarial — Name Never Stated": {
+        "trap": "MA forgets to ask for the patient's name.",
+        "correct": "patient_name should be null and flagged as a gap. Claude should not infer a name from context.",
+    },
+    "⚠️ Adversarial — Allergy No Reaction": {
+        "trap": "Patient lists allergies but cannot describe any reaction.",
+        "correct": "Both allergies should have reaction as null and status as unknown. Claude should not invent a reaction.",
+    },
+}
+
 TRANSCRIPTS = {
     "Primary Care — James Holloway": PRIMARY_CARE,
     "Urgent Care — Sarah Chen": URGENT_CARE,
     "Med Spa — Marcus Webb": MED_SPA,
     "Concierge Care — Diana Okonkwo": CONCIERGE,
+    **ADVERSARIAL_TRANSCRIPTS,
 }
