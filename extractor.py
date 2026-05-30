@@ -72,7 +72,11 @@ def extract_intake(transcript: str) -> ClinicalIntake:
     )
 
     raw = response.content[0].text
-    data = json.loads(raw)
+    # strip markdown code fences if Claude wrapped the JSON
+    stripped = raw.strip()
+    if stripped.startswith("```"):
+        stripped = stripped.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
+    data = json.loads(stripped)
     return ClinicalIntake.model_validate(data)
 
 

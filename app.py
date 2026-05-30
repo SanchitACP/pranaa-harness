@@ -5,6 +5,7 @@ from extractor import extract_intake
 from evaluator import evaluate
 from fhir_export import to_fhir_bundle
 from transcripts import TRANSCRIPTS
+from consistency import run_consistency_test
 
 st.set_page_config(
     page_title="Praana Intake Harness",
@@ -224,11 +225,12 @@ if intake and result:
 
     st.divider()
 
-    tab_chart, tab_gaps, tab_score, tab_fhir = st.tabs([
+    tab_chart, tab_gaps, tab_score, tab_fhir, tab_consistency = st.tabs([
         "Chart Data",
         f"Gaps & Follow-ups  ({result.gap_count})",
         "Evaluator Score",
         "FHIR Export",
+        "Consistency Test",
     ])
 
     # ── Tab: Chart Data ───────────────────────────────────────────────────────
@@ -374,6 +376,67 @@ if intake and result:
         )
 
         st.code(fhir_json, language="json")
+
+    # ── Tab: Consistency ──────────────────────────────────────────────────────
+    with tab_consistency:
+        st.subheader("Consistency Test")
+        st.caption(
+            "Runs extraction multiple times on the same transcript and checks whether "
+            "Claude returns the same values each time. Inconsistent fields may indicate "
+            "ambiguous transcript language or unreliable extraction."
+        )
+
+        if not os.environ.get("ANTHROPIC_API_KEY"):
+            st.warning("Consistency testing requires a live API key — not available in offline mode.")
+        else:
+            n_runs = st.slider("Number of runs", min_value=2, max_value=10, value=5)
+            run_consistency_btn = st.button("Run Consistency Test", use_container_width=True)
+
+            if run_consistency_btn:
+                with st.spinner(f"Running {n_runs} extractions..."):
+                    report, errors = run_consistency_test(transcript_text, n=n_runs)
+
+                if errors:
+                    for err in errors:
+                        st.error(err)
+
+                col_a, col_b, col_c = st.columns(3)
+                col_a.metric("Runs completed", report.n_runs)
+                col_b.metric("Consistent fields", report.consistent_count)
+                col_c.metric("Inconsistent fields", report.inconsistent_count)
+
+                st.progress(report.consistency_rate)
+                st.caption(f"Consistency rate: {report.consistency_rate:.0%}")
+
+                st.divider()
+
+                inconsistent = {k: v for k, v in report.fields.items() if not v.consistent}
+                consistent = {k: v for k, v in report.fields.items() if v.consistent}
+
+                if inconsistent:
+                    st.markdown("#### Inconsistent Fields")
+                    st.caption(
+                        "Quote similarity < 75% across runs — Claude is pulling from "
+                        "different parts of the transcript or paraphrasing inconsistently."
+                    )
+                    for field_name, result in inconsistent.items():
+                        with st.expander(f"⚠️  {field_name}  —  quote similarity: {result.quote_similarity:.0%}"):
+                            st.markdown("**Extracted values:**")
+                            for i, val in enumerate(result.values, 1):
+                                st.markdown(f"Run {i}: `{val or '—'}`")
+                            if any(result.quotes):
+                                st.markdown("**Evidence quotes:**")
+                                for i, q in enumerate(result.quotes, 1):
+                                    st.caption(f'Run {i}: "{q or "—"}"')
+
+                if consistent:
+                    st.markdown("#### Consistent Fields")
+                    st.caption("Quote similarity ≥ 75% — Claude is grounding these fields in the same part of the transcript every time.")
+                    for field_name, result in consistent.items():
+                        val = result.values[0] if result.values else "—"
+                        if val:
+                            sim = result.quote_similarity
+                            st.markdown(f"- **{field_name}**: `{val}` — quote similarity: {sim:.0%}")
 
 # ── Welcome state ─────────────────────────────────────────────────────────────
 else:
