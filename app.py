@@ -11,6 +11,129 @@ st.set_page_config(
     layout="wide",
 )
 
+st.markdown("""
+<style>
+/* ── Base ── */
+html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
+    background-color: #0a0a0a;
+    color: #ffffff;
+}
+[data-testid="stHeader"] {
+    background-color: #0a0a0a;
+}
+
+/* ── Sidebar ── */
+[data-testid="stSidebar"] {
+    background-color: #0f0f0f;
+    border-right: 1px solid #00ff41;
+}
+[data-testid="stSidebar"] * {
+    color: #ffffff !important;
+}
+
+/* ── Headings ── */
+h1 { color: #00ff41 !important; letter-spacing: 1px; }
+h2, h3 { color: #00ff41 !important; }
+h4, h5, h6 { color: #ccffcc !important; }
+
+/* ── Caption / subtext ── */
+[data-testid="stCaptionContainer"] p,
+.stCaption { color: #888888 !important; }
+
+/* ── Metrics ── */
+[data-testid="stMetric"] {
+    background: #111111;
+    border: 1px solid #00ff41;
+    border-radius: 8px;
+    padding: 12px;
+}
+[data-testid="stMetricLabel"] { color: #00ff41 !important; font-size: 0.75rem !important; }
+[data-testid="stMetricValue"] { color: #ffffff !important; }
+
+/* ── Buttons ── */
+[data-testid="stButton"] > button {
+    background-color: #00ff41 !important;
+    color: #000000 !important;
+    font-weight: 700 !important;
+    border: none !important;
+    border-radius: 6px !important;
+}
+[data-testid="stButton"] > button:hover {
+    background-color: #00cc33 !important;
+    color: #000000 !important;
+}
+[data-testid="stButton"] > button:disabled {
+    background-color: #1a1a1a !important;
+    color: #444444 !important;
+    border: 1px solid #333333 !important;
+}
+
+/* ── Download button ── */
+[data-testid="stDownloadButton"] > button {
+    background-color: transparent !important;
+    color: #00ff41 !important;
+    border: 1px solid #00ff41 !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+}
+
+/* ── Tabs ── */
+[data-testid="stTabs"] [role="tab"] {
+    color: #888888 !important;
+    border-bottom: 2px solid transparent;
+}
+[data-testid="stTabs"] [role="tab"][aria-selected="true"] {
+    color: #00ff41 !important;
+    border-bottom: 2px solid #00ff41 !important;
+}
+
+/* ── Expanders ── */
+[data-testid="stExpander"] {
+    background-color: #111111 !important;
+    border: 1px solid #1f1f1f !important;
+    border-radius: 6px !important;
+}
+[data-testid="stExpander"]:hover {
+    border-color: #00ff41 !important;
+}
+[data-testid="stExpander"] summary {
+    color: #ffffff !important;
+}
+
+/* ── Alerts / info boxes ── */
+[data-testid="stAlert"] {
+    background-color: #0f1f0f !important;
+    border-left: 3px solid #00ff41 !important;
+    color: #ccffcc !important;
+}
+
+/* ── Selectbox / radio ── */
+[data-testid="stSelectbox"] > div,
+[data-testid="stRadio"] > div {
+    color: #ffffff !important;
+}
+
+/* ── Divider ── */
+hr { border-color: #1f1f1f !important; }
+
+/* ── Code blocks ── */
+[data-testid="stCode"] {
+    background-color: #0f0f0f !important;
+    border: 1px solid #1f1f1f !important;
+}
+
+/* ── Progress bar ── */
+[data-testid="stProgressBar"] > div > div {
+    background-color: #00ff41 !important;
+}
+
+/* ── Table (markdown) ── */
+table { border-collapse: collapse; width: 100%; }
+th { color: #00ff41 !important; border-bottom: 1px solid #00ff41 !important; }
+td { color: #ffffff !important; border-bottom: 1px solid #1f1f1f !important; }
+</style>
+""", unsafe_allow_html=True)
+
 st.title("Praana Intake Reliability Harness")
 st.caption("GenAI QA system for ambient clinical intake — synthetic data only, no PHI")
 
